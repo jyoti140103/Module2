@@ -1,0 +1,52 @@
+import pandas as pd
+from google.colab import files
+
+uploaded = files.upload()
+
+
+df = pd.read_csv('tested.csv')
+
+print("First 5 Rows of Dataset:")
+print(df.head())
+
+
+print("\nLast 5 Rows of Dataset:")
+print(df.tail())
+
+
+print("\nDataset Information:")
+print(df.info())
+
+
+print("\nShape of Dataset (Rows, Columns):")
+print(df.shape)
+
+
+print("\nColumn Names:")
+print(df.columns)
+
+
+print("\nMissing Values:")
+print(df.isnull().sum())
+
+print("\nStatistical Summary:")
+print(df.describe())
+
+
+print("\nGender Count:")
+print(df['Sex'].value_counts())
+
+
+print("\nSurvival Count:")
+print(df['Survived'].value_counts())
+
+
+print("\nAverage Age:")
+print(df['Age'].mean())
+
+print("\nPassenger Class Count:")
+print(df['Pclass'].value_counts())
+
+
+print("\nSelected Columns:")
+print(df[['Name', 'Age', 'Sex', 'Survived']].head())
