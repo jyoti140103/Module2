@@ -1,0 +1,85 @@
+import sqlite3
+import pandas as pd
+
+def fetch_data_from_database():
+
+
+    conn = sqlite3.connect('example.db')
+    cursor = conn.cursor()
+
+
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS users
+        (id INTEGER PRIMARY KEY,
+         name TEXT,
+         age INTEGER,
+         marks INTEGER)
+    ''')
+
+
+    cursor.execute("DELETE FROM users")
+
+
+    users_data = [
+        ('Shivani', 21, 88),
+        ('Komal', 22, 75),
+        ('Priya', 20, 92),
+        ('Jyoti', 19, 67),
+        ('Roohi', 23, 81),
+        ('Neha', 21, 95),
+        ('Arpita', 20, 70),
+        ('Sneha', 22, 85),
+        ('Raunak', 24, 60),
+        ('Pooja', 21, 78)
+    ]
+
+    cursor.executemany(
+        "INSERT INTO users (name, age, marks) VALUES (?, ?, ?)",
+        users_data
+    )
+
+    conn.commit()
+
+
+    cursor.execute('SELECT * FROM users')
+    rows = cursor.fetchall()
+
+
+    df = pd.DataFrame(rows, columns=['id', 'name', 'age', 'marks'])
+
+    print("Complete DataFrame:")
+    print(df)
+
+
+    mean_marks = df['marks'].mean()
+
+    print("\nMean of Marks:")
+    print(mean_marks)
+
+
+    above_mean = df[df['marks'] > mean_marks]
+
+    print("\nStudents having marks greater than mean:")
+    print(above_mean[['name', 'marks']])
+
+
+    names_list = above_mean['name'].tolist()
+
+    print("\nList of names with marks greater than mean:")
+    print(names_list)
+
+
+    lowest_5 = df.nsmallest(5, 'marks')
+
+    print("\nLowest 5 Members:")
+    print(lowest_5)
+
+
+    sorted_df = df.sort_values(by='age')
+
+    print("\nDataFrame Sorted by Age:")
+    print(sorted_df)
+
+    conn.close()
+
+fetch_data_from_database()
